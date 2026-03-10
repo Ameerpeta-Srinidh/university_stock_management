@@ -57,7 +57,7 @@ Technologies Used
 The implementation can be built using:
 . Frontend: HTML, CSS, JavaScript
 . Backend: Node.js
-. Database: MongoDB
+. Database: Mysql
 . QR Code Library: qrcode.js
 
 
