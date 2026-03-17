@@ -1,4 +1,4 @@
-# inventory_management_systwm
+# inventory_management_system
 The University Stock management & QR Verification System is a Software Engineering Lab project designed to modernize the way universities manage their department inventory. Instead of maintaining manual stock registers, this system provides a centralized digital platform to track, verify, and manage assets efficiently.
 Universities contain multiple locations such as laboratories, classrooms, professor cabins, and administrative offices. Each of these spaces contains valuable items like desktops, chairs, printers, tables, keyboards, and mice. Managing these manually is time-consuming and error-prone. This project solves that problem using QR-based verification.
 
