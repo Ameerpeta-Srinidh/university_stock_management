@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStock · Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">UniStock</div>
+  <div class="topbar-nav">
+    <a href="dashboard.html" class="topbar-link active">Dashboard</a>
+    <a href="rooms.html" class="topbar-link">Rooms</a>
+    <a href="items.html" class="topbar-link">Inventory</a>
+  </div>
+  <button class="btn-sm" id="logoutBtn" onclick="logout()">Sign out</button>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">Dashboard</h1>
+  <p class="page-sub">Welcome back, <span id="userName">—</span> (<span id="userRole">—</span>)</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Rooms</div>
+      <div class="stat-value" id="totalRooms">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Items</div>
+      <div class="stat-value" id="totalItems">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Items</div>
+      <div class="stat-value" id="activeItems">–</div>
+    </div>
+  </div>
+</main>
+
+<script src="js/login.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
