@@ -1,0 +1,121 @@
+/* qrcode.css – Sprint 3 QR code styles */
+
+.back-link {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: var(--text2);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.15s;
+}
+.back-link:hover { color: var(--ink); }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.detail-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.detail-row:last-child { border-bottom: none; }
+
+.detail-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+}
+
+.detail-value {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.qr-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.qr-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.qr-display {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.qr-display img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.qr-placeholder {
+  font-size: 0.72rem;
+  color: var(--text3);
+  padding: 2rem;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Bulk generate page */
+.bulk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.qr-grid-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.qr-grid-item img {
+  max-width: 160px;
+  margin-bottom: 0.5rem;
+}
+
+.qr-grid-item .qr-item-label {
+  font-size: 0.68rem;
+  color: var(--text2);
+}
+
+@media (max-width: 640px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
