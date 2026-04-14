@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStock · Verification History</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/verify.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">UniStock</div>
+  <div class="topbar-nav">
+    <a href="dashboard.html" class="topbar-link">Dashboard</a>
+    <a href="rooms.html" class="topbar-link">Rooms</a>
+    <a href="items.html" class="topbar-link">Inventory</a>
+    <a href="verify.html" class="topbar-link">Verify</a>
+    <a href="history.html" class="topbar-link active">History</a>
+  </div>
+  <button class="btn-sm" id="logoutBtn" onclick="logout()">Sign out</button>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">Verification History</h1>
+  <p class="page-sub">Complete log of all item verifications</p>
+
+  <div class="filter-bar">
+    <input class="form-input filter-input" id="searchInput" type="text"
+           placeholder="Search by item ID or name..." oninput="filterHistory()">
+  </div>
+
+  <table class="data-table" id="historyTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Item ID</th>
+        <th>Item Name</th>
+        <th>Room</th>
+        <th>Verified By</th>
+        <th>Date</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="historyBody"></tbody>
+  </table>
+
+  <div class="empty-state" id="emptyState" style="display:none">
+    No verification records found.
+  </div>
+</main>
+
+<script src="js/login.js"></script>
+<script src="js/history.js"></script>
+</body>
+</html>

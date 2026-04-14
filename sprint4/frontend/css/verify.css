@@ -1,0 +1,77 @@
+/* verify.css – Sprint 4 verification styles */
+
+.verify-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.verify-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.verify-section-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+/* Verification Result */
+.verify-result {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  animation: fadeUp 0.3s ease;
+}
+
+.verify-result.success {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.verify-result.error {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.result-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.result-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.result-details {
+  font-size: 0.75rem;
+  color: var(--text2);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+
+/* Pending badge */
+.badge-pending { background: #fffbeb; color: #d97706; }
+.badge-verified { background: #ecfdf5; color: #059669; }
+
+@media (max-width: 640px) {
+  .verify-grid { grid-template-columns: 1fr; }
+}

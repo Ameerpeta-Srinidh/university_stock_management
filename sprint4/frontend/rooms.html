@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStock · Rooms</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">UniStock</div>
+  <div class="topbar-nav">
+    <a href="dashboard.html" class="topbar-link">Dashboard</a>
+    <a href="rooms.html" class="topbar-link active">Rooms</a>
+    <a href="items.html" class="topbar-link">Inventory</a>
+  </div>
+  <button class="btn-sm" id="logoutBtn" onclick="logout()">Sign out</button>
+</nav>
+
+<main class="page">
+  <div class="page-header">
+    <h1 class="page-title">Room Management</h1>
+    <button class="btn-primary btn-sm" id="addRoomBtn" onclick="showAddRoom()">+ Add Room</button>
+  </div>
+
+  <!-- Add / Edit Room Modal -->
+  <div class="modal-overlay" id="roomModal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-title" id="modalTitle">Add Room</div>
+      <input type="hidden" id="editRoomId">
+      <div class="form-group">
+        <label class="form-label" for="roomName">Room Name</label>
+        <input class="form-input" id="roomName" type="text" placeholder="e.g. Lab 301">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="locationType">Location Type</label>
+        <select class="form-input" id="locationType">
+          <option value="">Select type</option>
+          <option value="Lab">Lab</option>
+          <option value="Classroom">Classroom</option>
+          <option value="Cabin">Cabin</option>
+          <option value="Office">Office</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="department">Department</label>
+        <input class="form-input" id="department" type="text" placeholder="e.g. Computer Science">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveRoom()">Save</button>
+      </div>
+      <div class="form-error" id="roomErr"></div>
+    </div>
+  </div>
+
+  <table class="data-table" id="roomsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Room Name</th>
+        <th>Type</th>
+        <th>Department</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="roomsBody"></tbody>
+  </table>
+</main>
+
+<script src="js/login.js"></script>
+<script src="js/rooms.js"></script>
+</body>
+</html>
