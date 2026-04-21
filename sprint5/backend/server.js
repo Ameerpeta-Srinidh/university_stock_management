@@ -13,6 +13,7 @@ const itemRoutes         = require('./routes/items');
 const qrcodeRoutes       = require('./routes/qrcode');
 const verificationRoutes = require('./routes/verification');
 const reportRoutes       = require('./routes/reports');
+const adminRoutes        = require('./routes/admin');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,11 @@ app.use('/api/items',        itemRoutes);
 app.use('/api/qrcode',       qrcodeRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/reports',      reportRoutes);
+app.use('/api/admin',        adminRoutes);
+
+// Alias: POST /api/verify → /api/verification/verify
+// (per sequence diagram UC-003 which shows POST /api/verify)
+app.use('/api/verify', verificationRoutes);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });

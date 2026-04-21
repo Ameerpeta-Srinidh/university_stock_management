@@ -2,19 +2,54 @@
 // Sprint 2 – Inventory Item Management CRUD API
 
 const express = require('express');
+const QRCode  = require('qrcode');
 const db      = require('../config/db');
 const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Helper: generate next item ID
-async function generateItemId() {
-  const [rows] = await db.execute(
-    "SELECT item_id FROM ITEM ORDER BY item_id DESC LIMIT 1"
+// Helper: generate item ID in format UH-SCIS-<room_name>-<type>-<seq>
+async function generateItemId(room_id, item_type) {
+  // Get room name
+  const [rooms] = await db.execute('SELECT room_name FROM ROOM WHERE room_id = ?', [room_id]);
+  const roomName = rooms[0].room_name.replace(/\s+/g, '');  // Remove spaces
+
+  // Abbreviate item_type
+  const typeAbbr = item_type.substring(0, 3).toUpperCase();
+
+  // Count existing items in this room of this type to generate sequence
+  const [existing] = await db.execute(
+    'SELECT COUNT(*) AS cnt FROM ITEM WHERE room_id = ? AND item_type = ?',
+    [room_id, item_type]
   );
-  if (rows.length === 0) return 'ITEM-001';
-  const lastNum = parseInt(rows[0].item_id.split('-')[1], 10);
-  return `ITEM-${String(lastNum + 1).padStart(3, '0')}`;
+  const seq = existing[0].cnt + 1;
+
+  return `UH-SCIS-${roomName}-${typeAbbr}-${seq}`;
+}
+
+// Helper: auto-generate QR code for an item
+async function autoGenerateQR(item_id, item_name) {
+  const qrPayload = JSON.stringify({
+    item_id,
+    item_name,
+    system:    'UniStock',
+    generated: new Date().toISOString(),
+  });
+
+  const qrDataUrl = await QRCode.toDataURL(qrPayload, {
+    width: 300,
+    margin: 2,
+    color: { dark: '#2c2825', light: '#ffffff' },
+  });
+
+  await db.execute(
+    `INSERT INTO QR_CODE (item_id, qr_data)
+     VALUES (?, ?)
+     ON DUPLICATE KEY UPDATE qr_data = VALUES(qr_data), generated_at = CURRENT_TIMESTAMP`,
+    [item_id, qrDataUrl]
+  );
+
+  return qrDataUrl;
 }
 
 // GET /api/items – List all items (with optional filters)
@@ -67,6 +102,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 });
 
 // POST /api/items – Create a new item (Admin only)
+// Per sequence diagram UC-002: also auto-generates QR code and returns qr_data
 router.post('/', requireAuth, requireRole('Admin'), async (req, res) => {
   const { item_name, item_type, room_id, purchase_date } = req.body;
 
@@ -81,16 +117,21 @@ router.post('/', requireAuth, requireRole('Admin'), async (req, res) => {
       return res.status(404).json({ error: 'Room not found' });
     }
 
-    const item_id = await generateItemId();
+    // Generate item ID in UH-SCIS-<room>-<type>-<seq> format (per class diagram)
+    const item_id = await generateItemId(room_id, item_type);
 
     await db.execute(
       'INSERT INTO ITEM (item_id, room_id, item_name, item_type, purchase_date) VALUES (?, ?, ?, ?, ?)',
       [item_id, room_id, item_name, item_type, purchase_date || null]
     );
 
+    // Auto-generate QR code (per sequence diagram UC-002 & collaboration 2)
+    const qr_data = await autoGenerateQR(item_id, item_name);
+
     return res.status(201).json({
       message: 'Item created',
       item_id,
+      qr_data,
     });
   } catch (err) {
     console.error('Create item error:', err);
@@ -137,7 +178,14 @@ router.put('/:id', requireAuth, requireRole('Admin'), async (req, res) => {
 // DELETE /api/items/:id – Delete an item (Admin only)
 router.delete('/:id', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
-    // Remove related QR codes first
+    // Remove related verification history first
+    const [verRows] = await db.execute('SELECT ver_id FROM VERIFICATION WHERE item_id = ?', [req.params.id]);
+    for (const v of verRows) {
+      await db.execute('DELETE FROM VER_HISTORY WHERE ver_id = ?', [v.ver_id]);
+    }
+    await db.execute('DELETE FROM VERIFICATION WHERE item_id = ?', [req.params.id]);
+
+    // Remove related QR codes
     await db.execute('DELETE FROM QR_CODE WHERE item_id = ?', [req.params.id]);
 
     const [result] = await db.execute(

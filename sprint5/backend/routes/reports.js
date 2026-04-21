@@ -3,12 +3,50 @@
 
 const express = require('express');
 const db      = require('../config/db');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// GET /api/reports/summary – Dashboard summary stats
-router.get('/summary', requireAuth, async (req, res) => {
+// GET /api/reports – Main report: verified vs missing items (Admin only)
+// Per sequence diagram UC-004 & collaboration 4: returns { verified, missing }
+router.get('/', requireAuth, requireRole('Admin'), async (req, res) => {
+  try {
+    const [rows] = await db.execute(
+      `SELECT i.item_id, i.item_name, i.room_id,
+              v.status AS ver_status, v.ver_date,
+              u.username AS officer_name
+       FROM ITEM i
+       LEFT JOIN VERIFICATION v ON i.item_id = v.item_id
+       LEFT JOIN USER u ON v.officer_id = u.user_id
+       WHERE i.status = 'Active'
+       ORDER BY i.item_id`
+    );
+
+    // Split into verified and missing arrays (per collaboration 4: splitVerifiedMissing)
+    const verified = [];
+    const missing  = [];
+    const seen = new Set();
+
+    for (const row of rows) {
+      if (seen.has(row.item_id)) continue;
+      seen.add(row.item_id);
+
+      if (row.ver_status === 'Verified') {
+        verified.push(row);
+      } else {
+        missing.push(row);
+      }
+    }
+
+    return res.json({ verified, missing });
+  } catch (err) {
+    console.error('Report error:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /api/reports/summary – Dashboard summary stats (Admin only)
+router.get('/summary', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
     const [roomCount]     = await db.execute('SELECT COUNT(*) AS count FROM ROOM');
     const [itemCount]     = await db.execute('SELECT COUNT(*) AS count FROM ITEM');
@@ -33,8 +71,8 @@ router.get('/summary', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/reports/by-room – Items grouped by room
-router.get('/by-room', requireAuth, async (req, res) => {
+// GET /api/reports/by-room – Items grouped by room (Admin only)
+router.get('/by-room', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT r.room_id, r.room_name, r.location_type, r.department,
@@ -53,8 +91,8 @@ router.get('/by-room', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/reports/by-type – Items grouped by type
-router.get('/by-type', requireAuth, async (req, res) => {
+// GET /api/reports/by-type – Items grouped by type (Admin only)
+router.get('/by-type', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT item_type, COUNT(*) AS count
@@ -69,8 +107,8 @@ router.get('/by-type', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/reports/verification-overview – Verification stats
-router.get('/verification-overview', requireAuth, async (req, res) => {
+// GET /api/reports/verification-overview – Verification stats (Admin only)
+router.get('/verification-overview', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
     const [totalItems]    = await db.execute("SELECT COUNT(*) AS count FROM ITEM WHERE status = 'Active'");
     const [verifiedItems] = await db.execute(
@@ -103,8 +141,8 @@ router.get('/verification-overview', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/reports/export – Export items as JSON (CSV-ready)
-router.get('/export', requireAuth, async (req, res) => {
+// GET /api/reports/export – Export items as JSON (CSV-ready) (Admin only)
+router.get('/export', requireAuth, requireRole('Admin'), async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT i.item_id, i.item_name, i.item_type, i.purchase_date, i.status,

@@ -9,6 +9,12 @@ const API_BASE = '/api/auth';
     if (res.ok) {
       const page = window.location.pathname;
       if (page.includes('login')) window.location.href = 'dashboard.html';
+      
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      const adminLink = document.getElementById('navAdmin');
+      if (adminLink && user.role === 'Admin') {
+        adminLink.style.display = 'inline-block';
+      }
     } else {
       const page = window.location.pathname;
       if (!page.includes('login')) window.location.href = 'login.html';

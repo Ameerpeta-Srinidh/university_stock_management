@@ -22,6 +22,8 @@ async function loadItemDetail() {
     document.getElementById('itemDate').textContent  = item.purchase_date?.split('T')[0] || '—';
     document.getElementById('itemStatus').textContent = item.status;
 
+    // Load extra info
+    loadVerification();
     // Try to load existing QR code
     loadQR();
   } catch (err) {
@@ -37,6 +39,26 @@ async function loadQR() {
       document.getElementById('qrDisplay').innerHTML =
         `<img src="${qrcode.qr_data}" alt="QR Code for ${ITEM_ID}">`;
       document.getElementById('generateQrBtn').textContent = 'Regenerate QR Code';
+    }
+  } catch (_) {}
+}
+
+async function loadVerification() {
+  try {
+    const res = await fetch(`/api/verification/status/${ITEM_ID}`, { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      const badge = document.getElementById('verBadge');
+      if (data.status === 'Never verified') {
+         badge.textContent = 'Unverified';
+         badge.className = 'badge badge-decom'; // Gray/Redish depending on css
+         document.getElementById('verLast').textContent = 'Never';
+      } else {
+         badge.textContent = data.status;
+         badge.className = 'badge badge-pass'; 
+         document.getElementById('verLast').textContent = 
+           `${new Date(data.last_verification.ver_date).toLocaleString()} by ${data.last_verification.officer_name}`;
+      }
     }
   } catch (_) {}
 }
