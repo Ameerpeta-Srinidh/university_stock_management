@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStock · QR Verification</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/verify.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">UniStock</div>
+  <div class="topbar-nav">
+    <a href="dashboard.html" class="topbar-link">Dashboard</a>
+    <a href="rooms.html" class="topbar-link">Rooms</a>
+    <a href="items.html" class="topbar-link">Inventory</a>
+    <a href="verify.html" class="topbar-link active">Verify</a>
+    <a href="history.html" class="topbar-link">History</a>
+  </div>
+  <button class="btn-sm" id="logoutBtn" onclick="logout()">Sign out</button>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">QR Verification</h1>
+  <p class="page-sub">Scan a QR code or enter an Item ID to verify</p>
+
+  <div class="verify-grid">
+    <div class="verify-card">
+      <div class="verify-section-title">Manual Entry</div>
+      <div class="form-group">
+        <label class="form-label" for="manualItemId">Item ID</label>
+        <input class="form-input" id="manualItemId" type="text" placeholder="e.g. ITEM-001">
+      </div>
+      <button class="btn-primary" onclick="verifyManual()">Verify Item</button>
+    </div>
+
+    <div class="verify-card">
+      <div class="verify-section-title">Upload QR Image</div>
+      <div class="form-group">
+        <label class="form-label" for="qrUpload">Select QR code image</label>
+        <input class="form-input" id="qrUpload" type="file" accept="image/*">
+      </div>
+      <button class="btn-primary" onclick="verifyFromImage()">Scan & Verify</button>
+    </div>
+  </div>
+
+  <!-- Verification Result -->
+  <div class="verify-result" id="verifyResult" style="display:none">
+    <div class="result-icon" id="resultIcon">✓</div>
+    <div class="result-title" id="resultTitle">—</div>
+    <div class="result-details" id="resultDetails">—</div>
+  </div>
+</main>
+
+<script src="js/login.js"></script>
+<script src="js/verify.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStock · Analytics</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/analytics.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">UniStock</div>
+  <div class="topbar-nav">
+    <a href="dashboard.html" class="topbar-link">Dashboard</a>
+    <a href="rooms.html" class="topbar-link">Rooms</a>
+    <a href="items.html" class="topbar-link">Inventory</a>
+    <a href="verify.html" class="topbar-link">Verify</a>
+    <a href="history.html" class="topbar-link">History</a>
+    <a href="analytics.html" class="topbar-link active">Analytics</a>
+  </div>
+  <button class="btn-sm" id="logoutBtn" onclick="logout()">Sign out</button>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">Analytics Dashboard</h1>
+  <p class="page-sub">System-wide statistics and insights</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Rooms</div>
+      <div class="stat-value" id="statRooms">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Items</div>
+      <div class="stat-value" id="statItems">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Items</div>
+      <div class="stat-value" id="statActive">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">QR Codes</div>
+      <div class="stat-value" id="statQR">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Verified</div>
+      <div class="stat-value" id="statVerified">–</div>
+    </div>
+    <div class="stat-card accent">
+      <div class="stat-label">Verification %</div>
+      <div class="stat-value" id="statPct">–</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Items by Room</div>
+      <canvas id="roomChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Items by Type</div>
+      <canvas id="typeChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card full-width">
+    <div class="chart-title">Verification Progress</div>
+    <canvas id="verChart"></canvas>
+  </div>
+
+  <div style="margin-top:1.5rem; text-align:right">
+    <button class="btn-primary btn-sm" onclick="exportData()">⬇ Export Inventory Data</button>
+  </div>
+</main>
+
+<script src="js/login.js"></script>
+<script src="js/analytics.js"></script>
+</body>
+</html>

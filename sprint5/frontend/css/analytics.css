@@ -1,0 +1,45 @@
+/* analytics.css – Sprint 5 analytics styles */
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.chart-card.full-width {
+  margin-top: 1.5rem;
+}
+
+.chart-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.stat-card.accent {
+  background: var(--ink);
+  color: var(--white);
+  border-color: var(--ink);
+}
+
+.stat-card.accent .stat-label {
+  color: rgba(255,255,255,0.7);
+}
+
+.stat-card.accent .stat-value {
+  color: var(--white);
+}
+
+@media (max-width: 640px) {
+  .chart-grid { grid-template-columns: 1fr; }
+}
